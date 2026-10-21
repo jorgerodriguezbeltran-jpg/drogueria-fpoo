@@ -1,9 +1,12 @@
 /*
+
     Proyecto: Drogueria - FPOO - Universidad del Valle
+
     Módulo: Presentación (GRUPO 4)
 
     ESTE ARCHIVO ES TUYO: reemplaza los STUB por la implementación real (YA EDITÉ)
 */
+
 #include "CPresentador.h"
 #include <iomanip> // Librería necesaria para usar setw y left (formato de tablas)
 
