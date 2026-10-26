@@ -9,8 +9,35 @@
 
 #include "CPresentador.h"
 #include <iomanip> // Librería necesaria para usar setw y left (formato de tablas)
+#include <sstream>  // Para ostringstream
+#include <algorithm> // Para std::reverse
 
 using namespace std;
+
+// Función auxiliar interna (no pertenece al header ni rompe el contrato)
+// Convierte un número double/entero a formato moneda con punto como separador de miles.
+// Ejemplo: 1250000 -> "$1.250.000"
+
+static string formatearMoneda(double valor){
+    long long entero = static_cast<long long>(valor);
+    string str = to_string(entero);
+    int n = str.length();
+
+    string formateado = "";
+    int contador = 0;
+
+    for (int i = n-1; i >=0; i--) {
+        formateado += str[i];
+        contador++;
+        if (contador % 3 == 0 && i != 0) {
+            formateado += '.';
+        }
+    }
+
+    reverse(formateado.begin(), formateado.end());
+    return "$" +  formateado;
+}
+
 
 // Constructor: Inicializa la referencia al flujo de salida (por defecto es cout)
 CPresentador::CPresentador(ostream& sal) : salida(sal) {}
@@ -43,11 +70,11 @@ void CPresentador::mostrarMedicamentos(const vector<CMedicamento>& lista) const 
            << setw(25) << "Nombre"
            << setw(15) << "Forma"
            << setw(10) << "Cant."
-           << setw(12) << "Costo"
-           << setw(12) << "Precio" << endl;
+           << setw(14) << "Costo"
+           << setw(14) << "Precio" << endl;
 
     // Línea divisoria decorativa
-    salida << string(80, '-') << endl;
+    salida << string(84, '-') << endl;
 
     // 3. Recorremos el vector e imprimimos la información de cada medicamento
     for (const auto& m : lista) {
@@ -57,8 +84,8 @@ void CPresentador::mostrarMedicamentos(const vector<CMedicamento>& lista) const 
                // Convertimos el código numérico de la forma de presentación a texto
                << setw(15) << formaDePresentacionATexto(m.getFormaDePresentacion())
                << setw(10) << m.getCantidadDisponible()
-               << setw(12) << m.getCostoDeCompra()
-               << setw(12) << m.getPrecioDeVenta() << endl;
+               << setw(14) << formatearMoneda(m.getCostoDeCompra())
+               << setw(14) << formatearMoneda(m.getPrecioDeVenta()) << endl;
     }
 }
 
