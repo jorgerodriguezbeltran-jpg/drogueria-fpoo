@@ -11,6 +11,8 @@ int main(){
         CPresentador p;
         CHECK_EQ(p.formaDePresentacionATexto(1), "Tableta");
         CHECK_EQ(p.formaDePresentacionATexto(2), "Caja");
+        CHECK_EQ(p.formaDePresentacionATexto(5), "Crema");
+        CHECK_EQ(p.formaDePresentacionATexto(0), "Desconocida");
         CHECK_EQ(p.formaDePresentacionATexto(99), "Desconocida");
     }
 
@@ -27,6 +29,13 @@ int main(){
         p.mostrarExito("todo bien");
         CHECK_CONTIENE(out.str(), "[OK] todo bien");
     }
+    {
+        stringstream out;
+        CPresentador p(out);
+        p.mostrarTitulo("INVENTARIO");
+        CHECK_CONTIENE(out.str(), "INVENTARIO");
+        CHECK_CONTIENE(out.str(), "====");
+    }
 
     SECCION("CPresentador: mostrarMedicamentos");
     {
@@ -40,21 +49,37 @@ int main(){
         CHECK_CONTIENE(out.str(), "Ibuprofeno");
         CHECK_CONTIENE(out.str(), "Tableta");
     }
+    {   // lista vacía
+        stringstream out;
+        CPresentador p(out);
+        p.mostrarMedicamentos(vector<CMedicamento>());
+        CHECK_CONTIENE(out.str(), "No hay medicamentos");
+    }
+    {   // nombre muy largo: se recorta
+        stringstream out;
+        CPresentador p(out);
+        vector<CMedicamento> lista;
+        string largo = "Medicamento con un nombre absurdamente largo para la tabla";
+        lista.push_back(CMedicamento(1, largo, 3, 10, 100, 200));
+        p.mostrarMedicamentos(lista);
+        CHECK(out.str().find(largo) == string::npos);
+        CHECK_CONTIENE(out.str(), "...");
+    }
 
-    SECCION("Prueba de decimales en CPresentador"); {
-    stringstream out;
-    CPresentador presentador(out);
+    SECCION("Extra Grupo 4: Formato de moneda con separador de miles");
+    {
+        stringstream out;
+        CPresentador p(out);
+        vector<CMedicamento> lista;
+        // Medicamento con precio/costo elevado para verificar puntos de miles
+        lista.push_back(CMedicamento(101, "Acetaminofen", 1, 50, 1500.00, 1250000.75));
 
-    vector<CMedicamento> lista;
-    // Medicamento con precio en decimales: 1250000.75
-    lista.push_back(CMedicamento(101, "Acetaminofen", 1, 50, 1500.00, 1250000.75));
+        p.mostrarMedicamentos(lista);
+        string salidaTexto = out.str();
 
-    presentador.mostrarMedicamentos(lista);
-    string salidaTexto = out.str();
-
-    // Verificas que la salida contenga la representación esperada
-    CHECK_CONTIENE(salidaTexto, "$1.250.000");
-}
+        // Verificas que la salida contenga el formato $1.250.000 o $1.500
+        CHECK_CONTIENE(salidaTexto, "$1.250.000");
+    }
         
     return RESUMEN();
 }
