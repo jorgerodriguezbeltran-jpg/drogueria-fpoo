@@ -41,7 +41,20 @@ int main(){
         CHECK_CONTIENE(out.str(), "Tableta");
     }
 
-    // TODO (Grupo 4): lista vacía, nombres muy largos, títulos, etc.
+    SECCION("Prueba de decimales en CPresentador"); {
+    stringstream out;
+    CPresentador presentador(out);
 
+    vector<CMedicamento> lista;
+    // Medicamento con precio en decimales: 1250000.75
+    lista.push_back(CMedicamento(101, "Acetaminofen", 1, 50, 1500.00, 1250000.75));
+
+    presentador.mostrarMedicamentos(lista);
+    string salidaTexto = out.str();
+
+    // Verificas que la salida contenga la representación esperada
+    CHECK_CONTIENE(salidaTexto, "$1.250.000");
+}
+        
     return RESUMEN();
 }
