@@ -12,7 +12,7 @@
  *     - NO calcula nada ni lee datos: solo muestra.
  *   Colaboradores:
  *     - CMedicamento: se leen sus datos (getters) para mostrarlos.
- *
+
  * REGLAS DEL CONTRATO:
  *   - formaDePresentacionATexto(forma): 1="Tableta", 2="Caja", 3="Jarabe",
  *       4="Ampolla", 5="Crema"; cualquier otro valor="Desconocida".
@@ -40,7 +40,7 @@ class CPresentador
     CPresentador(ostream& salida = cout);
     string formaDePresentacionATexto(int forma) const;
     void mostrarMedicamentos(const vector<CMedicamento>& lista) const;
-    void mostrarExito(string mensaje) const;
+    void mostrarExito(string mensaje) const; 
     void mostrarError(string mensaje) const;
     void mostrarTitulo(string titulo) const;
 };

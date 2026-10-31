@@ -1,6 +1,23 @@
 // Pruebas de CMedicamento (clase base). Responsable: GRUPO 2
 #include "minitest.h"
-#include "CMedicamento.h"
+#ifndef "CMedicamento.h"
+#define "CMedicamento.h"    
+class CMedicamento {
+public:
+    CMedicamento(int id, const std::string& nombre, int formaDePresentacion,
+                 int cantidadDisponible, double costoDeCompra, double precioDeVenta)
+        : id(id), nombre(nombre), formaDePresentacion(formaDePresentacion),
+          cantidadDisponible(cantidadDisponible), costoDeCompra(costoDeCompra),
+          precioDeVenta(precioDeVenta) {}
+
+    int getId() const { return id; }
+    std::string getNombre() const { return nombre; }
+    int getFormaDePresentacion() const { return formaDePresentacion; }
+    int getCantidadDisponible() const { return cantidadDisponible; }
+    double getCostoDeCompra() const { return costoDeCompra; }
+    double getPrecioDeVenta() const { return precioDeVenta; }
+
+    void setCantidadDisponible(int cantidad) { cantidadDisponible = cantidad; } 
 
 int main(){
     CMedicamento m(1, "Acetaminofen 60Mg", 1, 100, 1000, 2000);
